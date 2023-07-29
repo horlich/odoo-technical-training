@@ -4,9 +4,10 @@
     "application": True,  # This line says the module is an App, and not a module
     "depends": ["base"],  # dependencies
     "data": [
-
+        'security/ir.model.access.csv',
+        'views/estate_property_views.xml'
     ],
     "installable": True,
-    "application": True,
+    "description": "Meine Beschreibung",
     'license': 'LGPL-3',
 }
