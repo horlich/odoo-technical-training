@@ -7,6 +7,7 @@ class PropertyModel(models.Model):
     _description = "Modul intern"
 
     name = fields.Char(required=True, string='Title')
+    property_type_id = fields.Many2one("estate.property.type", string="Property Type")
     description = fields.Text()
     postcode = fields.Char()
     date_availability = fields.Date(copy=False, default=lambda self: (fields.Date.today() + datetime.timedelta(90)))
@@ -26,5 +27,7 @@ class PropertyModel(models.Model):
         default = 'n'
     )
     active = fields.Boolean(default=True)
+    salesperson_id = fields.Many2one("res.users", string="Salesperson", default=lambda self: self.env.user)
+    buyer_id = fields.Many2one("res.partner", string="Buyer", copy=False)
 
     
