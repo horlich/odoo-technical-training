@@ -8,6 +8,7 @@ class PropertyModel(models.Model):
 
     name = fields.Char(required=True, string='Title')
     property_type_id = fields.Many2one("estate.property.type", string="Property Type")
+    tag_ids = fields.Many2many("estate.property.tag", string="Property Tags")
     description = fields.Text()
     postcode = fields.Char()
     date_availability = fields.Date(copy=False, default=lambda self: (fields.Date.today() + datetime.timedelta(90)))
@@ -29,5 +30,6 @@ class PropertyModel(models.Model):
     active = fields.Boolean(default=True)
     salesperson_id = fields.Many2one("res.users", string="Salesperson", default=lambda self: self.env.user)
     buyer_id = fields.Many2one("res.partner", string="Buyer", copy=False)
+    offer_ids = fields.One2many("estate.property.offer", "property_id", string="Offers")
 
     
