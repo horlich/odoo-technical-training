@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 import datetime
 from datetime import timedelta
 
@@ -20,6 +20,7 @@ class PropertyModel(models.Model):
     garage = fields.Boolean()
     garden = fields.Boolean()
     garden_area = fields.Integer()
+    total_area = fields.Float(compute="_compute_total_area")
     garden_orientation = fields.Selection(
         selection = [('n', "North"), ('s', "South"), ('e', "East"), ('w', "West")]
     )
@@ -31,5 +32,14 @@ class PropertyModel(models.Model):
     salesperson_id = fields.Many2one("res.users", string="Salesperson", default=lambda self: self.env.user)
     buyer_id = fields.Many2one("res.partner", string="Buyer", copy=False)
     offer_ids = fields.One2many("estate.property.offer", "property_id", string="Offers")
+    best_price = fields.Float(compute="_compute_best_price")
 
-    
+
+    @api.depends("living_area", "garden_area", "offer_ids.price")
+    def _compute_total_area(self):
+        for data in self:
+            data.total_area = data.living_area + data.garden_area
+
+    def _compute_best_price(self):
+        for data in self:
+            data.best_price = max(data.offer_ids.mapped("price"))
