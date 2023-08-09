@@ -35,11 +35,21 @@ class PropertyModel(models.Model):
     best_price = fields.Float(compute="_compute_best_price")
 
 
-    @api.depends("living_area", "garden_area", "offer_ids.price")
+    @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
         for data in self:
             data.total_area = data.living_area + data.garden_area
 
+    @api.depends("offer_ids.price")
     def _compute_best_price(self):
         for data in self:
             data.best_price = max(data.offer_ids.mapped("price"))
+
+    @api.onchange("garden")
+    def _onchange_garden(self):
+        if (self.garden):
+            self.garden_area = 10
+            self.garden_orientation = 'n'
+        else:
+            self.garden_area = 0
+            self.garden_orientation = ''
