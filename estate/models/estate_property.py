@@ -1,6 +1,8 @@
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 import datetime
 from datetime import timedelta
+import logging
 
 class PropertyModel(models.Model):
     _name = "estate.property"
@@ -53,3 +55,23 @@ class PropertyModel(models.Model):
         else:
             self.garden_area = 0
             self.garden_orientation = ''
+
+    def action_cancel_pressed(self):
+        if (self.state == 's'):
+            raise UserError("A sold property cannot be canceled.")
+        else:
+            self.state = 'c'
+        return True
+
+    def action_sold_pressed(self):
+        if (self.state == 'c'):
+            raise UserError("A canceled property cannot be sold.")
+        else:
+            self.state = 's'
+        return True
+    
+    def exists_accepted_offer(self):
+        for status in self.offer_ids.mapped("status"):
+            if (status == 'a'):
+                return True
+        return False

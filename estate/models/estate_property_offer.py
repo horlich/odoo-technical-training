@@ -1,4 +1,5 @@
 from odoo import api,fields, models
+from odoo.exceptions import UserError
 import datetime
 from datetime import date, timedelta
 
@@ -35,6 +36,21 @@ class PropertyOfferModel(models.Model):
             else:
                 date_from = date.today()
             data.validity = (data.date_deadline - data.create_date.date()).days
+
+    def action_accepted_pressed(self):
+        if (self.property_id.exists_accepted_offer()):
+            raise UserError("This property has already an accepted offer.")
+        self.status = 'a'
+        self.property_id.buyer_id = self.partner_id
+        self.property_id.selling_price = self.price
+        return True
+
+    def action_refused_pressed(self):
+        self.status = 'r'
+        return True
+    
+
+
 
  
 
