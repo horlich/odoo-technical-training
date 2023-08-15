@@ -49,6 +49,10 @@ class PropertyOfferModel(models.Model):
         self.status = 'r'
         return True
     
+    _sql_constraints = [
+        ('positive_offer_price', 'CHECK(price >= 0)', 'The offer price must be positive!')
+    ]
+    
 
 
 

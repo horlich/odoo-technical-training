@@ -45,7 +45,11 @@ class PropertyModel(models.Model):
     @api.depends("offer_ids.price")
     def _compute_best_price(self):
         for data in self:
-            data.best_price = max(data.offer_ids.mapped("price"))
+            if (len(data.offer_ids)):
+                data.best_price = max(data.offer_ids.mapped("price"))
+            else:
+                data.best_price = 0
+            
 
     @api.onchange("garden")
     def _onchange_garden(self):
@@ -75,3 +79,8 @@ class PropertyModel(models.Model):
             if (status == 'a'):
                 return True
         return False
+    
+    _sql_constraints = [
+        ('positive_expected_price', 'CHECK(expected_price >= 0)', 'The expected price must be positive!'),
+        ('positive_selling_price', 'CHECK(selling_price >= 0)', 'The selling price must be positive!')
+    ]
