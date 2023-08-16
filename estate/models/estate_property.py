@@ -1,5 +1,6 @@
 from odoo import api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import float_utils
 import datetime
 from datetime import timedelta
 import logging
@@ -84,3 +85,13 @@ class PropertyModel(models.Model):
         ('positive_expected_price', 'CHECK(expected_price >= 0)', 'The expected price must be positive!'),
         ('positive_selling_price', 'CHECK(selling_price >= 0)', 'The selling price must be positive!')
     ]
+
+    @api.constrains('selling_price')
+    def _check_selling_price(self):
+        for record in self:
+            if (float_utils.float_is_zero(record.selling_price, None, 2)):
+                return
+            elif (record.selling_price < (record.expected_price * 0.9)):
+                raise ValidationError("The selling price cannot be lower than 90% of the expected price!")
+
+

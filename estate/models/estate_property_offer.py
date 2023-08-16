@@ -21,7 +21,7 @@ class PropertyOfferModel(models.Model):
     @api.depends("validity")
     def _compute_deadline(self):
         for data in self:
-            if (data.create_date != None):
+            if (data.create_date):
                 date_from = data.create_date
             else:
                 date_from = date.today()
@@ -43,6 +43,7 @@ class PropertyOfferModel(models.Model):
         self.status = 'a'
         self.property_id.buyer_id = self.partner_id
         self.property_id.selling_price = self.price
+        self.property_id.state = 's'
         return True
 
     def action_refused_pressed(self):
