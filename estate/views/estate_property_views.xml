@@ -32,6 +32,7 @@
                 <header>
                     <button name="action_cancel_pressed" type="object" string="Cancel"/>
                     <button name="action_sold_pressed" type="object" string="Sold"/>
+                    <field name="state" widget="statusbar" statusbar_visible="n,r,a,s"/>
                 </header>
                 <sheet>
                     <h1>
@@ -47,7 +48,7 @@
                             <field name="date_availability" string="Available From"/>
                         </group>
                         <group>
-                            <field name="state"/>
+                            <!-- <field name="state"/> -->
                             <field name="expected_price"/>
                             <field name="best_price" string="Best Offer"/>
                             <field name="selling_price"/>

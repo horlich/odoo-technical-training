@@ -15,6 +15,13 @@
                     <h1>
                         <field name="name"/>
                     </h1>
+                    <field name="property_ids">
+                        <tree>
+                            <field name="name" string="Title"/>
+                            <field name="expected_price"/>
+                            <field name="state" string="Status"/>
+                        </tree>
+                    </field>
                 </sheet>
             </form>
         </field>

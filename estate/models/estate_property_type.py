@@ -6,6 +6,8 @@ class EstateTypeModel(models.Model):
 
     name = fields.Char(required=True)
 
+    property_ids = fields.One2many('estate.property', 'property_type_id')
+
     _sql_constraints = [
         ('unique_type_name', 'unique(name)', 'Type name exists already!')
     ]
