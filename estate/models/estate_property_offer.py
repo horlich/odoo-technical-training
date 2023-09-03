@@ -7,6 +7,7 @@ from datetime import date, timedelta
 class PropertyOfferModel(models.Model):
     _name = "estate.property.offer"
     _description = "Modul intern Offer"
+    _order = "price desc"
 
     price = fields.Float()
     validity = fields.Integer(default=7)

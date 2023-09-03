@@ -8,6 +8,7 @@ import logging
 class PropertyModel(models.Model):
     _name = "estate.property"
     _description = "Modul intern"
+    _order = "id desc"
 
     name = fields.Char(required=True, string='Title')
     property_type_id = fields.Many2one("estate.property.type", string="Property Type")
