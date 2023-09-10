@@ -10,10 +10,12 @@
         <field name="name">estate.property.tree</field>
         <field name="model">estate.property</field>
         <field name="arch" type="xml">
-            <tree string="Channel">
+            <tree string="Channel" decoration-success="state == 'r' or state == 'a'" decoration-bf="state == 'a'" decoration-muted="state == 's'">
                 <field name="name"/>
+                <field name="state" invisible='True'/>
                 <field name="property_type_id"/>
                 <field name="postcode"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                 <field name="bedrooms"/>
                 <field name="living_area"/>
                 <field name="expected_price"/>
