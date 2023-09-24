@@ -82,6 +82,13 @@ class PropertyModel(models.Model):
                 return True
         return False
     
+    def get_highest_offer(self):
+        highest = 0.0
+        for price in self.offer_ids.mapped("price"):
+            if (price > highest):
+                highest = price
+        return highest
+    
     _sql_constraints = [
         ('positive_expected_price', 'CHECK(expected_price >= 0)', 'The expected price must be positive!'),
         ('positive_selling_price', 'CHECK(selling_price >= 0)', 'The selling price must be positive!')
@@ -95,4 +102,8 @@ class PropertyModel(models.Model):
             elif (record.selling_price < (record.expected_price * 0.9)):
                 raise ValidationError("The selling price cannot be lower than 90% of the expected price!")
 
-
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_state(self):
+        for record in self:
+            if ((record.state != 'n') and (record.state != 'c')):
+                raise UserError("Only properties with new oder cancelled state can be deleted."); 
